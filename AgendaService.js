@@ -80,13 +80,19 @@ class AgendaService {
 
       resposta.dados = await axios.post(agenda.url);
 
-      linha += " - ok - " + resposta.dados.data;
+      linha += " - ok ";
+      if (resposta && resposta.dados && resposta.dados.data) {
+        linha += " - " + resposta.dados.data;
+      }
     } catch (error) {
       resposta.sucesso = false;
-      resposta.error = error.response.data;
       linha += " - ERRO ";
-      if (error.response.status >= 500) {
-        linha += " - " + error.response.data;
+
+      if (error && error.resposta && error.resposta.data) {
+        resposta.error = error.response.data;
+        if (error.response.status >= 500) {
+          linha += " - " + error.response.data;
+        }
       }
     }
 
