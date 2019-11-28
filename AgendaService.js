@@ -88,7 +88,7 @@ class AgendaService {
       resposta.sucesso = false;
       linha += " - ERRO ";
 
-      if (error && error.resposta && error.resposta.data) {
+      if (error && error.response && error.response.data) {
         resposta.error = error.response.data;
         if (error.response.status >= 500) {
           linha += " - " + error.response.data;
