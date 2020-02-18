@@ -16,7 +16,7 @@ class AgendaService {
 
       for (const agenda of agendas) {
         console.log(
-          moment().format("YYYY-MM-DD hh:MM:ss") +
+          moment().format("YYYY-MM-DD hh:mm:ss") +
             ` ** [${agenda.descricao}] Iniciando ... `
         );
         this.executar(agenda);
@@ -69,7 +69,7 @@ class AgendaService {
     };
 
     let linha =
-      moment().format("YYYY-MM-DD hh:MM:ss") +
+      moment().format("YYYY-MM-DD hh:mm:ss") +
       ` ** [${agenda.descricao}] - finalizado `;
 
     try {
