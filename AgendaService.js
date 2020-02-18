@@ -15,7 +15,10 @@ class AgendaService {
       console.log(agendas.length + " agendamentos a executar.");
 
       for (const agenda of agendas) {
-        console.log(` ** [${agenda.descricao}] Iniciando ... `);
+        console.log(
+          moment.format("YYYY-MM-DD hh:MM:ss") +
+            ` ** [${agenda.descricao}] Iniciando ... `
+        );
         this.executar(agenda);
       }
     } catch (error) {
@@ -65,7 +68,9 @@ class AgendaService {
       sucesso: true
     };
 
-    let linha = ` ** [${agenda.descricao}] - finalizado `;
+    let linha =
+      moment.format("YYYY-MM-DD hh:MM:ss") +
+      ` ** [${agenda.descricao}] - finalizado `;
 
     try {
       const client = await BdClient.client();
