@@ -1,11 +1,11 @@
 const AgendaService = require("./AgendaService");
+const { log } = require("./util");
+
 require("dotenv").config();
 
 const intervalo_minutos = process.env.INTERVALO_MINUTOS || 9;
 
-console.log(
-  `Iniciando Agendamento ... rodando a cada ${intervalo_minutos} minutos.`
-);
+log(`Iniciando Agendamento ... rodando a cada ${intervalo_minutos} minutos.`);
 
 console.log();
 

@@ -1,6 +1,7 @@
 const axios = require("axios");
 const moment = require("moment");
 const BdClient = require("./BdClient");
+const { log } = require("./util");
 
 class AgendaService {
   static async run() {
@@ -8,17 +9,14 @@ class AgendaService {
       const agendas = await this.getHabilitados();
 
       if (!(agendas && agendas.length)) {
-        console.log("Nenhum Agendamento a Executar!");
+        log("Nenhum Agendamento a Executar!");
         return;
       }
 
-      console.log(agendas.length + " agendamentos a executar.");
+      log(agendas.length + " agendamentos a executar.");
 
       for (const agenda of agendas) {
-        console.log(
-          moment().format("YYYY-MM-DD hh:mm:ss") +
-            ` ** [${agenda.descricao}] Iniciando ... `
-        );
+        log(`** [${agenda.descricao}] Iniciando ... `);
         this.executar(agenda);
       }
     } catch (error) {
@@ -68,9 +66,7 @@ class AgendaService {
       sucesso: true
     };
 
-    let linha =
-      moment().format("YYYY-MM-DD hh:mm:ss") +
-      ` ** [${agenda.descricao}] - finalizado `;
+    let linha = `** [${agenda.descricao}] - finalizado `;
 
     try {
       const client = await BdClient.client();
@@ -98,10 +94,14 @@ class AgendaService {
         if (error.response.status >= 500) {
           linha += " - " + error.response.data;
         }
+      } else if (typeof error === "string") {
+        linha += " - " + error;
+      } else if (error.message) {
+        linha += " - " + error.message;
       }
     }
 
-    console.log(linha);
+    log(linha);
   }
 }
 
