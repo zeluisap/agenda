@@ -2,6 +2,7 @@ const axios = require("axios");
 const moment = require("moment");
 const BdClient = require("./BdClient");
 const { log } = require("./util");
+const _ = require("lodash");
 
 class AgendaService {
   static async run() {
@@ -89,18 +90,17 @@ class AgendaService {
       resposta.sucesso = false;
       linha += " - ERRO ";
 
-      if (error && error.response && error.response.statusText) {
-        linha += " - " + error.response.statusText;
-      } else if (error && error.response && error.response.data) {
-        resposta.error = error.response.data;
-        if (error.response.status >= 500) {
-          linha += " - " + error.response.data;
-        }
-      } else if (typeof error === "string") {
-        linha += " - " + error;
-      } else if (error.message) {
-        linha += " - " + error.message;
+      let errorMessage = _.get(error, "response.data.error.message");
+
+      if (!errorMessage && typeof error === "string") {
+        errorMessage = " - " + error;
       }
+
+      if (!errorMessage && error.message) {
+        errorMessage = " - " + error.message;
+      }
+
+      linha += " - " + errorMessage;
     }
 
     log(linha);
