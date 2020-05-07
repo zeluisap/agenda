@@ -21,7 +21,7 @@ class AgendaService {
       }
     } catch (error) {
       console.error({
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -42,7 +42,7 @@ class AgendaService {
         return null;
       }
 
-      return objs.filter(item => {
+      return objs.filter((item) => {
         if (!item.ultima_execucao) {
           return true;
         }
@@ -56,14 +56,14 @@ class AgendaService {
       });
     } catch (error) {
       console.error({
-        error: error.message
+        error: error.message,
       });
     }
   }
 
   static async executar(agenda) {
     let resposta = {
-      sucesso: true
+      sucesso: true,
     };
 
     let linha = `** [${agenda.descricao}] - finalizado `;
@@ -89,7 +89,9 @@ class AgendaService {
       resposta.sucesso = false;
       linha += " - ERRO ";
 
-      if (error && error.response && error.response.data) {
+      if (error && error.response && error.response.statusText) {
+        linha += " - " + error.response.statusText;
+      } else if (error && error.response && error.response.data) {
         resposta.error = error.response.data;
         if (error.response.status >= 500) {
           linha += " - " + error.response.data;
