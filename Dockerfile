@@ -1,9 +1,9 @@
 FROM node:11
 
-COPY . /app
+# COPY . /app
 
 WORKDIR /app
 
-RUN npm install
+# RUN npm install
 
 CMD ["node", "app.js"]

@@ -9,6 +9,8 @@ class AgendaService {
     try {
       const agendas = await this.getHabilitados();
 
+      log();
+
       if (!(agendas && agendas.length)) {
         log("Nenhum Agendamento a Executar!");
         return;
