@@ -1,8 +1,8 @@
 const axios = require("axios");
 const moment = require("moment");
-const BdClient = require("./BdClient");
 const { log } = require("./util");
 const _ = require("lodash");
+const { Agenda } = require("./AgendaMongo");
 
 class AgendaService {
   static async run() {
@@ -31,26 +31,21 @@ class AgendaService {
 
   static async getHabilitados() {
     try {
-      const client = await BdClient.client();
-      const res = await client.query(
-        `
-        select * 
-        from agendamento 
-        where (ativo = true)
-        `
-      );
+      const objs = await Agenda.find({
+        ativo: true,
+      });
 
-      const objs = res.rows;
       if (!(objs && objs.length)) {
         return null;
       }
 
       return objs.filter((item) => {
-        if (!item.ultima_execucao) {
+        if (!item.ultimaExecucao) {
           return true;
         }
+
         const agora = moment();
-        const proxima = moment(item.ultima_execucao).add(
+        const proxima = moment(item.ultimaExecucao).add(
           item.intervalo,
           "seconds"
         );
@@ -72,15 +67,8 @@ class AgendaService {
     let linha = `** [${agenda.descricao}] - finalizado `;
 
     try {
-      const client = await BdClient.client();
-      await client.query(
-        `
-                update agendamento
-                set ultima_execucao = now()
-                where id = $1
-                `,
-        [agenda.id]
-      );
+      agenda.ultimaExecucao = new Date();
+      await agenda.save();
 
       resposta.dados = await axios.post(agenda.url);
 
