@@ -1,9 +1,13 @@
 FROM node:11
 
-# COPY . /app
-
 WORKDIR /app
 
-# RUN npm install
+COPY ["package.json", "package-lock.json*", "./"]
 
-CMD ["node", "app.js"]
+RUN npm install
+
+COPY . .
+
+RUN npm install pm2 -g
+
+CMD ["pm2-runtime", "ecosystem.config.js"]
